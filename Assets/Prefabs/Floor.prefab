@@ -108,3 +108,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normal: {fileID: 2100000, guid: fe47ab2fef91296439af9c615ebdfd4c, type: 2}
   onHover: {fileID: 2100000, guid: 632ee669d73ff03478028d75eee50e63, type: 2}
+  error: {fileID: 2100000, guid: fcb23e0c9d62d14478fe12ba1e05848e, type: 2}
+  path: {fileID: 2100000, guid: 9cc6ca021889fc24c9592b426a382aec, type: 2}
