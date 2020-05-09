@@ -100,8 +100,6 @@ public class GameManager : MonoBehaviour
     }
     public void BuildWall(GameObject building){
         if(wallMax == false){
-            Vector3 newPos = new Vector3(selectedFloor.transform.position.x, selectedFloor.transform.position.y+1, selectedFloor.transform.position.z);
-           
             buildUI.transform.position =  orginalPosition;
             if(building == wallPrefabs){
                 string tmp = Mathf.RoundToInt(selectedFloor.transform.position.x).ToString()+Mathf.RoundToInt(selectedFloor.transform.position.z).ToString();
@@ -110,12 +108,14 @@ public class GameManager : MonoBehaviour
                     selectedFloor.GetComponent<FloorScript>().ErrorPlace();
                     floorsPos[int.Parse(tmp)] = true;
                 }else{
+                    Vector3 newPos = new Vector3(selectedFloor.transform.position.x, selectedFloor.transform.position.y+1, selectedFloor.transform.position.z);
                     GameObject newObj = Instantiate(building, newPos, selectedFloor.transform.rotation);
                     wallDeploy++;
                     selectedFloor.GetComponent<FloorScript>().setHasWall(true);
                     wallDeployText.text = string.Format("{0}/{1}", wallDeploy.ToString(), maxWallDeploy.ToString());
                 }
             }else{
+                Vector3 newPos = new Vector3(selectedFloor.transform.position.x, selectedFloor.transform.position.y+0.5f, selectedFloor.transform.position.z);
                 GameObject newObj = Instantiate(building, newPos, selectedFloor.transform.rotation);
                 selectedFloor.GetComponent<FloorScript>().setHasWall(true);
                 wallDeploy++;

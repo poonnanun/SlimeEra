@@ -381,12 +381,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 687224064}
+        m_MethodName: BuildWall
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgument: {fileID: -927199367670048503, guid: 978dd2086c619b3479479828b2d52b0b,
+            type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2440,7 +2441,7 @@ GameObject:
   - component: {fileID: 1181619397}
   - component: {fileID: 1181619396}
   m_Layer: 0
-  m_Name: Tank
+  m_Name: Trap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2508,7 +2509,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1181619397}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 687224064}
+        m_MethodName: BuildWall
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: -927199367670048503, guid: 2bf9fe77212af454896fe363fa238311,
+            type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1181619397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4523,7 +4536,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Tank
+  m_Text: Trap
 --- !u!222 &1783472356
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4630,7 +4643,7 @@ MonoBehaviour:
         m_MethodName: BuildUnit
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: -927199367670048503, guid: b82ce695dd6e5a14a8bbc5f5ef76b3e6,
+          m_ObjectArgument: {fileID: 6209955538661105555, guid: 2afa1f45509f636479052656b872eca6,
             type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
@@ -5464,56 +5477,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2310253760117409737, guid: 20330a17195d4074ba506a4f001c5f61,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2310253760117409737, guid: 20330a17195d4074ba506a4f001c5f61,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2310253760186632970, guid: 20330a17195d4074ba506a4f001c5f61,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 2310253760186632970, guid: 20330a17195d4074ba506a4f001c5f61,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4663910210984920245, guid: 20330a17195d4074ba506a4f001c5f61,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 9.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4663910210984920245, guid: 20330a17195d4074ba506a4f001c5f61,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 4.5
-      objectReference: {fileID: 0}
     - target: {fileID: 4901448367150567303, guid: 20330a17195d4074ba506a4f001c5f61,
         type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 513032849}
-    - target: {fileID: 5700336587175374016, guid: 20330a17195d4074ba506a4f001c5f61,
-        type: 3}
-      propertyPath: m_NavMeshLayer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6181499183683206565, guid: 20330a17195d4074ba506a4f001c5f61,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6181499183683206565, guid: 20330a17195d4074ba506a4f001c5f61,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8530344137560490710, guid: 20330a17195d4074ba506a4f001c5f61,
         type: 3}
       propertyPath: m_Mesh
