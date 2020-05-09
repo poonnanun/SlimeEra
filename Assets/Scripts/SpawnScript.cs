@@ -5,18 +5,25 @@ using UnityEngine;
 public class SpawnScript : MonoBehaviour
 {
     public GameObject monster;
+    private GameManager gameManager;
+    private int amount;
     // Start is called before the first frame update
     void Start()
     {
-        
+        gameManager = FindObjectOfType<GameManager>();
     }
-    private void OnMouseDown() {
+    
+    public void Spawn(int amount){
+        this.amount = amount;
+        InvokeRepeating("NormalSpawn", 1, 1);
+    }
+
+    public void NormalSpawn(){
         GameObject tmp = Instantiate(monster, transform.position, transform.rotation);
-        
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
+        gameManager.AddMonster(tmp);
+        if (--amount == 0){
+            gameManager.FinishSpawn();
+            CancelInvoke("NormalSpawn");
+        } 
     }
 }

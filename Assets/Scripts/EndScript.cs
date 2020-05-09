@@ -4,18 +4,14 @@ using UnityEngine;
 
 public class EndScript : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private GameManager gameManager;
     void Start()
     {
-        
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     private void OnTriggerEnter(Collider other) {
-        print(1);
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
+        gameManager.MonsterLeak(other.gameObject);
+
     }
 }

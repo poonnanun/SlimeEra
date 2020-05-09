@@ -16,7 +16,7 @@ public class FloorScript : MonoBehaviour
     }
 
     private void OnMouseEnter() {
-        if(gameManager.getState() == 0){
+        if(gameManager.GetState() == 0 && gameManager.getWallMax() == false){
             if (rend != null){
                 rend.material = onHover;
             }
@@ -29,7 +29,7 @@ public class FloorScript : MonoBehaviour
         }
     }
     private void OnMouseDown() {
-        if(gameManager.getState() == 0){
+        if(gameManager.GetState() == 0 && gameManager.getWallMax() == false){
             gameManager.SelectWall(gameObject);
         }
     }

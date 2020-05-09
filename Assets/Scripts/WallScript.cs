@@ -18,7 +18,7 @@ public class WallScript : MonoBehaviour
     }
 
     private void OnMouseEnter() {
-        if(gameManager.getState() == 0 && hasUnit == 0){
+        if(gameManager.GetState() == 0 && hasUnit == 0){
             if (rend != null){
                 rend.material = onHover;
             }
@@ -31,7 +31,7 @@ public class WallScript : MonoBehaviour
         }
     }
     private void OnMouseDown() {
-        if(gameManager.getState() == 0 && hasUnit == 0){
+        if(gameManager.GetState() == 0 && hasUnit == 0){
             gameManager.SelectUnit(gameObject);
         }
     }
