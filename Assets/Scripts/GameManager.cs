@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverPanel;
     public GameObject wallPrefabs;
     public GameObject positionTrigger;
+    public List<GameObject> floors;
     private SpawnScript spawnScript;
     private GameObject selectedFloor;
     private GameObject selectedWall;
@@ -111,10 +112,12 @@ public class GameManager : MonoBehaviour
                 }else{
                     GameObject newObj = Instantiate(building, newPos, selectedFloor.transform.rotation);
                     wallDeploy++;
+                    selectedFloor.GetComponent<FloorScript>().setHasWall(true);
                     wallDeployText.text = string.Format("{0}/{1}", wallDeploy.ToString(), maxWallDeploy.ToString());
                 }
             }else{
                 GameObject newObj = Instantiate(building, newPos, selectedFloor.transform.rotation);
+                selectedFloor.GetComponent<FloorScript>().setHasWall(true);
                 wallDeploy++;
                 wallDeployText.text = string.Format("{0}/{1}", wallDeploy.ToString(), maxWallDeploy.ToString());
             }
@@ -179,11 +182,17 @@ public class GameManager : MonoBehaviour
         Day();
     }
     public void Day(){
+        foreach(GameObject i in floors){
+            i.GetComponent<FloorScript>().DeleteObstruct();
+        }
         state = 0;
         phase.sprite = sun;
         skip.SetActive(true);
     }
     public void Night(){
+        foreach(GameObject i in floors){
+            i.GetComponent<FloorScript>().PlaceObstruct();
+        }
         state = 1;
         phase.sprite = moon;
         skip.SetActive(false);
@@ -239,6 +248,7 @@ public class GameManager : MonoBehaviour
                 break;
             }
         }
+        path.Add(40);
         foreach(int i in path){
             float z = (float)Mathf.Floor(i%10);
             float x = (float)Mathf.Floor(i/10);
