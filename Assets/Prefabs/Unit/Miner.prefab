@@ -108,5 +108,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mineStr: 3
-  mineRate: 1
+  speed: 1
   title: Miner

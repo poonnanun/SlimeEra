@@ -8,6 +8,8 @@ public class TrapController : MonoBehaviour
     public int damage;
     public float slow;
     public float duration;
+    public float speed;
+    private float countdown;
     private int exp;
     private int level;
     private bool isMax;
@@ -23,9 +25,13 @@ public class TrapController : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
     }
     private void OnTriggerEnter(Collider other) {
-        if(other.gameObject.tag == "Monster"){
-            Hit(other.gameObject);
+        if (countdown <= 0){
+            if(other.gameObject.tag == "Monster"){
+                Hit(other.gameObject);
+            }
+            countdown = 2f / speed;
         }
+        
     }
     private void OnMouseDown() {
         if(gameManager.GetState() == 0 || gameManager.GetState() == 2){
@@ -34,7 +40,7 @@ public class TrapController : MonoBehaviour
     }
     void Update()
     {
-        
+        countdown -= Time.deltaTime;
     }
     private void Hit(GameObject target){
         GainExp(2);

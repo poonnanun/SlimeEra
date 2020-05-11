@@ -21,7 +21,7 @@ public class MonsterController : MonoBehaviour
     {
         agent.speed = normalSpeed;
         agent.destination = endPoint.transform.position;
-        hp = 10;
+        hp = 100;
     }
 
     // Update is called once per frame

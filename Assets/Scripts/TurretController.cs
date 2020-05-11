@@ -7,9 +7,9 @@ public class TurretController : MonoBehaviour
 {
     public Transform target;
     [Header("Attributes")]
-    public float range = 2f;
-    public float fireRate = 1f;
-    public int damage = 5;
+    public float range;
+    public float fireRate;
+    public int damage;
     private float fireCountdown = 0f;
     private GameManager gameManager;
     [Header("Assets")]
@@ -85,9 +85,16 @@ public class TurretController : MonoBehaviour
     public int GetDamage(){
         return damage;
     }
+    public void SetSpeed(float speed){
+        this.fireRate = speed;
+    }
+    public float GetSpeed(){
+        return fireRate;
+    }
     public void GainExp(int getExp){
         if(!isMax){
             this.exp += getExp;
+            // this.exp += 50;
             if(exp >= 100){
                 level += 1;
                 LevelUp();
@@ -100,6 +107,9 @@ public class TurretController : MonoBehaviour
         } 
     }
     public void LevelUp(){
+        Upgrade speedUp = new SpeedUp();
+        speedUp.Effect(this.gameObject);
+        upgrades.Add(speedUp);
         print("Ding!!");
     }
     public void SetInfo(GameObject ui){
@@ -107,7 +117,13 @@ public class TurretController : MonoBehaviour
         ui.transform.Find("Level").gameObject.GetComponent<TMP_Text>().text = string.Format("Level {0}",this.level);
         ui.transform.Find("GunnerInfo").Find("Damage").Find("DamageText").gameObject.GetComponent<Text>().text = this.damage.ToString();
         ui.transform.Find("GunnerInfo").Find("Range").Find("RangeText").gameObject.GetComponent<Text>().text = this.range.ToString();
-        ui.transform.Find("GunnerInfo").Find("Speed").Find("SpeedText").gameObject.GetComponent<Text>().text = this.fireRate.ToString();
+        ui.transform.Find("GunnerInfo").Find("Speed").Find("SpeedText").gameObject.GetComponent<Text>().text = Mathf.Round(this.fireRate).ToString();
         ui.transform.Find("Level").Find("ExpBar").gameObject.GetComponent<Slider>().value = exp;
+        int i = 1;
+        foreach(Upgrade u in upgrades){
+            string src = u.GetName();
+            ui.transform.Find("PowerUp").Find("Power"+i.ToString()).GetComponent<Image>().sprite = u.GetSprite();
+            i++;
+        }
     }
 }

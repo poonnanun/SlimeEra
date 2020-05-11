@@ -7,7 +7,7 @@ using TMPro;
 public class MinerController : MonoBehaviour
 {
     public int mineStr;
-    public float mineRate;
+    public float speed;
     private GameManager gameManager;
     private float countdown = 0f;
     private int exp;
@@ -17,8 +17,6 @@ public class MinerController : MonoBehaviour
     public string title;
     private void Awake() {
         gameManager = FindObjectOfType<GameManager>();
-        mineStr = 3;
-        mineRate = 1f;
         level = 1;
         exp = 0;
         isMax = false;
@@ -29,7 +27,7 @@ public class MinerController : MonoBehaviour
         if(gameManager.GetState() == 2){
             if (countdown <= 0){
                 Mine();
-                countdown = 1f / mineRate;
+                countdown = 1f / speed;
             }
             countdown -= Time.deltaTime;
         }
@@ -64,7 +62,7 @@ public class MinerController : MonoBehaviour
         ui.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = this.title;
         ui.transform.Find("Level").gameObject.GetComponent<TMP_Text>().text = string.Format("Level {0}",this.level);
         ui.transform.Find("MinerInfo").Find("Str").Find("StrText").gameObject.GetComponent<Text>().text = this.mineStr.ToString();
-        ui.transform.Find("MinerInfo").Find("Speed").Find("SpeedText").gameObject.GetComponent<Text>().text = this.mineRate.ToString();
+        ui.transform.Find("MinerInfo").Find("Speed").Find("SpeedText").gameObject.GetComponent<Text>().text = this.speed.ToString();
         ui.transform.Find("Level").Find("ExpBar").gameObject.GetComponent<Slider>().value = exp;
     }
     

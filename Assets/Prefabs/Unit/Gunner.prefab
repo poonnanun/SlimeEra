@@ -176,7 +176,7 @@ MonoBehaviour:
   target: {fileID: 0}
   range: 3
   fireRate: 1
-  damage: 5
+  damage: 10
   bulletPrefabs: {fileID: 3399194931556341050, guid: 10f2feb2516ddc24e9978f938f7ad79e,
     type: 3}
   title: Gunner

@@ -38,6 +38,13 @@ public class GameManager : MonoBehaviour
     private Dictionary<int, bool> floorsPos;
     private Dictionary<int, int> posParents;
     private List<GameObject> highlightedPath;
+    private List<Upgrade> upgradesT1;
+    private List<Upgrade> upgradesT2;
+    private List<Upgrade> upgradesT3;
+    private List<Upgrade> upgradesGunner;
+    private List<Upgrade> upgradesMiner;
+    private List<Upgrade> upgradesSlow;
+    private List<Upgrade> upgradesTrap;
     private List<int> exploredFloors;
     private int state;
     private int wave;
@@ -54,8 +61,9 @@ public class GameManager : MonoBehaviour
     private int monsterBounty;
     void Awake()
     {
-        DeclareObject();
-        InitializeValue();
+        DeclareObjects();
+        InitializeValues();
+        AddUpgrades();
     }
 
     private void Start() {
@@ -70,13 +78,13 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    private void InitializeValue(){
+    private void InitializeValues(){
         life = 10; // need to implement this later4
         wave = 1; // need to implement this later
         wallMax = false;
-        currency = 100;
+        currency = 200;
         wallDeploy = 0;
-        maxWallDeploy = 10;
+        maxWallDeploy = 20;
         isWaveRunning = 0;
         state = 0;
         gunnerCost = 25;
@@ -98,7 +106,7 @@ public class GameManager : MonoBehaviour
         currencyText.text = currency.ToString();
         wallDeployText.text = string.Format("{0}/{1}", wallDeploy.ToString(), maxWallDeploy.ToString());
     }
-    private void DeclareObject(){
+    private void DeclareObjects(){
         floorsPos = new Dictionary<int, bool>();
         posParents = new Dictionary<int, int>();
         spawnScript = FindObjectOfType<SpawnScript>();
@@ -106,6 +114,60 @@ public class GameManager : MonoBehaviour
         towers = new List<GameObject>();
         highlightedPath = new List<GameObject>();
         exploredFloors = new List<int>();
+        upgradesT1 = new List<Upgrade>();
+        upgradesT2 = new List<Upgrade>();
+        upgradesT3 = new List<Upgrade>();
+        upgradesGunner = new List<Upgrade>();
+        upgradesMiner = new List<Upgrade>();
+        upgradesTrap = new List<Upgrade>();
+        upgradesSlow = new List<Upgrade>();
+    }
+    private void AddUpgrades(){
+        List<Upgrade> tmp = new List<Upgrade>();
+        Upgrade powerUp = new PowerUp();
+        tmp.Add(powerUp);
+
+        //Sort each tier
+        foreach(Upgrade u in tmp){
+            if(u.GetTag() == "Anyone"){
+                if(u.GetRarity() == 1){
+                    upgradesT1.Add(u);
+                }else if(u.GetRarity() == 2){
+                    upgradesT2.Add(u);
+                }else if(u.GetRarity() == 3){
+                    upgradesT3.Add(u);
+                }
+            }else if(u.GetTag() == "Gunner"){
+                upgradesGunner.Add(u);
+            }else if(u.GetTag() == "Miner"){
+                upgradesMiner.Add(u);
+            }else if(u.GetTag() == "Trap"){
+                upgradesTrap.Add(u);
+            }else if(u.GetTag() == "Slow"){
+                upgradesSlow.Add(u);
+            }
+        }
+    }
+    public List<Upgrade> GetUpgradeT1(){
+        return upgradesT1;
+    }
+    public List<Upgrade> GetUpgradeT2(){
+        return upgradesT2;
+    }
+    public List<Upgrade> GetUpgradeT3(){
+        return upgradesT3;
+    }
+    public List<Upgrade> GetUpgradeGunner(){
+        return upgradesGunner;
+    }
+    public List<Upgrade> GetUpgradeMiner(){
+        return upgradesMiner;
+    }
+    public List<Upgrade> GetUpgradeSlow(){
+        return upgradesSlow;
+    }
+    public List<Upgrade> GetUpgradeTrap(){
+        return upgradesTrap;
     }
     public void SelectFloor(GameObject floor){
         selectedFloor = floor;
