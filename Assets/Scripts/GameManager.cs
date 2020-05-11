@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using TMPro;
 public class GameManager : MonoBehaviour
 {
     public GameObject buildUI;
     public GameObject unitUI;
+    public GameObject unitInfo;
+    public GameObject gunnerInfo;
+    public GameObject minerInfo;
+    public GameObject trapInfo;
+    public GameObject slowInfo;
     public Image phase;
     public Sprite sun;
     public Sprite moon;
@@ -19,13 +24,17 @@ public class GameManager : MonoBehaviour
     public Text wallDeployText;
     public GameObject gameOverPanel;
     public GameObject wallPrefabs;
+    public GameObject gunnerPrefabs;
+    public GameObject minerPrefabs;
     public GameObject positionTrigger;
     public List<GameObject> floors;
     private SpawnScript spawnScript;
     private GameObject selectedFloor;
     private GameObject selectedWall;
+    private GameObject selectedUnit;
     private Vector3 orginalPosition;
     private List<GameObject> monsters;
+    private List<GameObject> towers;
     private Dictionary<int, bool> floorsPos;
     private Dictionary<int, int> posParents;
     private List<GameObject> highlightedPath;
@@ -38,7 +47,11 @@ public class GameManager : MonoBehaviour
     private int maxWallDeploy;
     private int isWaveRunning;
     private bool wallMax;
-
+    private int gunnerCost;
+    private int minerCost;
+    private int trapCost;
+    private int wallCost;
+    private int monsterBounty;
     void Awake()
     {
         DeclareObject();
@@ -61,11 +74,16 @@ public class GameManager : MonoBehaviour
         life = 10; // need to implement this later4
         wave = 1; // need to implement this later
         wallMax = false;
-        currency = 0;
+        currency = 100;
         wallDeploy = 0;
         maxWallDeploy = 10;
         isWaveRunning = 0;
         state = 0;
+        gunnerCost = 25;
+        minerCost = 50;
+        trapCost = 25;
+        wallCost = 10;
+        monsterBounty = 2;
         orginalPosition = new Vector3(0, 100, 0);
         lifeText.text = life.ToString();
         waveText.text = wave.ToString();
@@ -85,22 +103,42 @@ public class GameManager : MonoBehaviour
         posParents = new Dictionary<int, int>();
         spawnScript = FindObjectOfType<SpawnScript>();
         monsters = new List<GameObject>();
+        towers = new List<GameObject>();
         highlightedPath = new List<GameObject>();
         exploredFloors = new List<int>();
     }
-    public void SelectWall(GameObject floor){
+    public void SelectFloor(GameObject floor){
         selectedFloor = floor;
         state = 1;
-        buildUI.transform.position = selectedFloor.transform.position;
+        buildUI.SetActive(true);
     }
-    public void SelectUnit(GameObject wall){
+    public void SelectWall(GameObject wall){
         selectedWall = wall;
         state = 1;
-        unitUI.transform.position = selectedWall.transform.position;
+        unitUI.SetActive(true);
+    }
+    public void SelectUnit(GameObject unit){
+        selectedUnit = unit;
+        if(state == 0){
+            state = 1;
+        }
+        unitInfo.SetActive(true);
+        if(unit.tag == "Gunner"){
+            gunnerInfo.SetActive(true);
+            unit.GetComponent<TurretController>().SetInfo(unitInfo);
+        }else if(unit.tag == "Miner"){
+            minerInfo.SetActive(true);
+            unit.GetComponent<MinerController>().SetInfo(unitInfo);
+        }else if(unit.tag == "Slow"){
+            slowInfo.SetActive(true);
+            unit.GetComponent<TrapController>().SetInfo(unitInfo);
+        }else if(unit.tag == "Trap"){
+            trapInfo.SetActive(true);
+            unit.GetComponent<TrapController>().SetInfo(unitInfo);
+        }
     }
     public void BuildWall(GameObject building){
         if(wallMax == false){
-            buildUI.transform.position =  orginalPosition;
             if(building == wallPrefabs){
                 string tmp = Mathf.RoundToInt(selectedFloor.transform.position.x).ToString()+Mathf.RoundToInt(selectedFloor.transform.position.z).ToString();
                 floorsPos[int.Parse(tmp)] = false;
@@ -108,19 +146,34 @@ public class GameManager : MonoBehaviour
                     selectedFloor.GetComponent<FloorScript>().ErrorPlace();
                     floorsPos[int.Parse(tmp)] = true;
                 }else{
-                    Vector3 newPos = new Vector3(selectedFloor.transform.position.x, selectedFloor.transform.position.y+1, selectedFloor.transform.position.z);
-                    GameObject newObj = Instantiate(building, newPos, selectedFloor.transform.rotation);
-                    wallDeploy++;
-                    selectedFloor.GetComponent<FloorScript>().setHasWall(true);
-                    wallDeployText.text = string.Format("{0}/{1}", wallDeploy.ToString(), maxWallDeploy.ToString());
+                    if(currency >= wallCost){
+                        UseCurrency(wallCost);
+                        Vector3 newPos = new Vector3(selectedFloor.transform.position.x, selectedFloor.transform.position.y+1, selectedFloor.transform.position.z);
+                        GameObject newObj = Instantiate(building, newPos, selectedFloor.transform.rotation);
+                        wallDeploy++;
+                        selectedFloor.GetComponent<FloorScript>().setHasWall(true);
+                        wallDeployText.text = string.Format("{0}/{1}", wallDeploy.ToString(), maxWallDeploy.ToString());
+                    }else{
+                        floorsPos[int.Parse(tmp)] = true;
+                        selectedFloor.GetComponent<FloorScript>().ErrorPlace();
+                    }
                 }
             }else{
-                Vector3 newPos = new Vector3(selectedFloor.transform.position.x, selectedFloor.transform.position.y+0.5f, selectedFloor.transform.position.z);
-                GameObject newObj = Instantiate(building, newPos, selectedFloor.transform.rotation);
-                selectedFloor.GetComponent<FloorScript>().setHasWall(true);
-                wallDeploy++;
-                wallDeployText.text = string.Format("{0}/{1}", wallDeploy.ToString(), maxWallDeploy.ToString());
+                if(currency >= trapCost){
+                    UseCurrency(trapCost);
+                    Vector3 newPos = new Vector3(selectedFloor.transform.position.x, selectedFloor.transform.position.y+0.5f, selectedFloor.transform.position.z);
+                    GameObject newObj = Instantiate(building, newPos, selectedFloor.transform.rotation);
+                    towers.Add(newObj);
+                    print("tower Count = "+towers.Count);
+                    selectedFloor.GetComponent<FloorScript>().setHasWall(true);
+                    wallDeploy++;
+                    wallDeployText.text = string.Format("{0}/{1}", wallDeploy.ToString(), maxWallDeploy.ToString());
+                }else{
+                    selectedFloor.GetComponent<FloorScript>().ErrorPlace();
+                }
             }
+            buildUI.SetActive(false);
+            FindShotestPath();
             state = 0;
             if(wallDeploy == maxWallDeploy){
                 wallMax = true;
@@ -129,9 +182,24 @@ public class GameManager : MonoBehaviour
     }
     public void BuildUnit(GameObject building){
         Vector3 newPos = new Vector3(selectedWall.transform.position.x, selectedWall.transform.position.y+1, selectedWall.transform.position.z);
-        GameObject tmp = Instantiate(building, newPos, selectedWall.transform.rotation);
-        unitUI.transform.position =  orginalPosition;
-        selectedWall.GetComponent<WallScript>().setHasUnit(1);
+        int cost = 0;
+        if(building == minerPrefabs){
+            cost = minerCost;
+        }else if(building == gunnerPrefabs){
+            cost = gunnerCost;
+        }else{
+            return;
+        }
+        if(currency >= cost){
+            UseCurrency(cost);
+            GameObject tmp = Instantiate(building, newPos, selectedWall.transform.rotation);
+            towers.Add(tmp);
+            print("tower Count = "+towers.Count);
+            selectedWall.GetComponent<WallScript>().setHasUnit(1);
+        }else{
+            selectedWall.GetComponent<WallScript>().ErrorPlace();
+        }
+        unitUI.SetActive(false);
         state = 0;
     }
     public void AddMonster(GameObject monster){
@@ -156,13 +224,41 @@ public class GameManager : MonoBehaviour
     }
     public void MonsterDied(GameObject monster){
         monsters.Remove(monster);
+        foreach(GameObject t in towers){
+            if(t.tag == "Gunner"){
+                t.GetComponent<TurretController>().GainExp(1);
+            }else if(t.tag == "Miner"){
+                t.GetComponent<MinerController>().GainExp(1);
+            }else if(t.tag == "Slow"){
+                t.GetComponent<TrapController>().GainExp(1);
+            }else if(t.tag == "Trap"){
+                t.GetComponent<TrapController>().GainExp(1);
+            }
+        }
+        AddCurrency(monsterBounty);
         monsterLeftText.text = monsters.Count.ToString();
         Destroy(monster);
     }    
     public void CloseUI(){
-        buildUI.transform.position =  orginalPosition;
-        unitUI.transform.position =  orginalPosition;
-        state = 0;
+        buildUI.SetActive(false);
+        unitUI.SetActive(false);
+        if(selectedFloor != null){
+            selectedFloor.GetComponent<FloorScript>().SetSelect(false);
+        }
+        if(selectedWall != null){
+            selectedWall.GetComponent<WallScript>().SetSelect(false);
+        }
+        unitInfo.SetActive(false);
+        gunnerInfo.SetActive(false);
+        minerInfo.SetActive(false);
+        slowInfo.SetActive(false);
+        trapInfo.SetActive(false);
+        if(state == 1){
+            state = 0;
+        }else if(state == 2){
+            state = 2;
+        }
+        
     }
     public void SetState(int state){
         this.state = state;
@@ -170,8 +266,19 @@ public class GameManager : MonoBehaviour
     public int GetState(){
         return state;
     }
-    public bool getWallMax(){
+    public void SetMonsterBounty(int monsterBounty){
+        this.monsterBounty = monsterBounty;
+    }
+    public bool GetWallMax(){
         return wallMax;
+    }
+    public void AddCurrency(int curr){
+        this.currency += curr;
+        this.currencyText.text = currency.ToString();
+    }
+    public void UseCurrency(int curr){
+        this.currency -= curr;
+        this.currencyText.text = currency.ToString();
     }
     public void Spawn(){
         spawnScript.Spawn(wave*2);
@@ -193,7 +300,7 @@ public class GameManager : MonoBehaviour
         foreach(GameObject i in floors){
             i.GetComponent<FloorScript>().PlaceObstruct();
         }
-        state = 1;
+        state = 2;
         phase.sprite = moon;
         skip.SetActive(false);
         Spawn();

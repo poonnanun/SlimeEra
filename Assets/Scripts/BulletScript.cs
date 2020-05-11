@@ -7,8 +7,10 @@ public class BulletScript : MonoBehaviour
     private Transform target;
     public GameObject bulletParticle;
     public float speed = 10f;
-    public void Seek(Transform target){
+    private int damage;
+    public void Seek(Transform target, int damage){
         this.target = target;
+        this.damage = damage;
     }
 
     // Update is called once per frame
@@ -28,6 +30,7 @@ public class BulletScript : MonoBehaviour
     }
     void HitTarget(){
         GameObject effect = Instantiate(bulletParticle, transform.position, transform.rotation);
+        target.gameObject.GetComponent<MonsterController>().Hit(damage);
         Destroy(effect, 1.5f);
         Destroy(this.gameObject);
     }

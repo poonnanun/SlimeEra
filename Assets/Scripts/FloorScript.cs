@@ -13,6 +13,7 @@ public class FloorScript : MonoBehaviour
     private GameManager gameManager;
     private bool isPath;
     private bool hasWall;
+    private bool isSelected;
     private GameObject invisWall;
     void Start()
     {
@@ -24,7 +25,7 @@ public class FloorScript : MonoBehaviour
     }
 
     private void OnMouseEnter() {
-        if(gameManager.GetState() == 0 && gameManager.getWallMax() == false){
+        if(gameManager.GetState() == 0 && gameManager.GetWallMax() == false){
             if (rend != null){
                 rend.material = onHover;
             }
@@ -32,21 +33,26 @@ public class FloorScript : MonoBehaviour
     }
 
     private void OnMouseExit() {
-        if (rend != null && !isPath){
-            rend.material = normal;
-        }else if(rend != null && isPath){
-            rend.material = path;
-        }
+        if(!isSelected){
+            if (rend != null && !isPath){
+                rend.material = normal;
+            }else if(rend != null && isPath){
+                rend.material = path;
+            }
+        } 
     }
     private void OnMouseDown() {
-        if(gameManager.GetState() == 0 && gameManager.getWallMax() == false){
-            gameManager.SelectWall(gameObject);
+        if(gameManager.GetState() == 0 && gameManager.GetWallMax() == false){
+            gameManager.SelectFloor(gameObject);
+            isSelected = true;
         }
     }
     public void ErrorPlace(){
+        isSelected = false;
         if (rend != null){
             rend.material = error;
         }
+        Invoke("OnMouseExit", 0.5f);
     }
 
     public void PathEnable(){
@@ -75,5 +81,18 @@ public class FloorScript : MonoBehaviour
     }
     public void setHasWall(bool hasWall){
         this.hasWall = hasWall;
+        isSelected = false;
+        if (rend != null){
+            rend.material = normal;
+        }
+    }
+
+    public void SetSelect(bool isSelected){
+        this.isSelected = isSelected;
+        if (rend != null && !isPath){
+            rend.material = normal;
+        }else if(rend != null && isPath){
+            rend.material = path;
+        }
     }
 }
