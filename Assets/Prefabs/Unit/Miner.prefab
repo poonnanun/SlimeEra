@@ -28,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5358929355853809146}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: -0.25, z: 0}
+  m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -110,3 +110,7 @@ MonoBehaviour:
   mineStr: 3
   speed: 1
   title: Miner
+  mineParticle: {fileID: 2527991070724862514, guid: 85ff0d8cfa9c8db439701e29c4d7ea05,
+    type: 3}
+  lvUp: {fileID: 2100000, guid: 30bfd3c08451d144e9157b78ff5020bc, type: 2}
+  normal: {fileID: 2100000, guid: 079738c9faab7a94fb7cf2adca0bb883, type: 2}

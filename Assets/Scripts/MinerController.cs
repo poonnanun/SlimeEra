@@ -21,7 +21,12 @@ public class MinerController : MonoBehaviour
     private float expRate;
     private List<Upgrade> nextPath;
     private LoadSprite loadSprite;
+    public GameObject mineParticle;
+    public Material lvUp;
+    public Material normal;
+    private Renderer rend;
     private void Awake() {
+        rend = GetComponent<Renderer>();
         gameManager = FindObjectOfType<GameManager>();
         loadSprite = GameObject.FindObjectOfType<LoadSprite>();
         upgradePath = gameManager.GetUpgradePath();
@@ -50,8 +55,10 @@ public class MinerController : MonoBehaviour
         }
     }
     private void Mine(){
+        GameObject effect = Instantiate(mineParticle, transform.position, mineParticle.transform.rotation);
+        Destroy(effect, 1.5f);
         gameManager.AddCurrency(mineStr);
-        GainExp(50);
+        GainExp(5);
     }
     public void GainExp(float getExp){
         if(!isMax){
@@ -65,11 +72,14 @@ public class MinerController : MonoBehaviour
     public void LevelUp(){
         level += 1;
         skillPoint += 1;
+        if (rend != null){
+            rend.material = lvUp;
+        }
         if(nextPath.Count == 0){
             nextPath = gameManager.Get3RandomUpgrade(this.gameObject);
         }
         exp = exp - maxExp;  
-        maxExp = maxExp * 2;
+        maxExp = maxExp * 1.25f;
         if(level == 10){
             isMax = true;
             exp = maxExp;
@@ -101,7 +111,7 @@ public class MinerController : MonoBehaviour
         }
         ui.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = this.title;
         ui.transform.Find("Level").gameObject.GetComponent<TMP_Text>().text = string.Format("Level {0}",this.level);
-        ui.transform.Find("Upgrade").Find("Text").gameObject.GetComponent<Text>().text = string.Format("Level: {0}",(maxExp-exp)*1.5);
+        ui.transform.Find("Upgrade").Find("Text").gameObject.GetComponent<Text>().text = string.Format("Level: {0}",Mathf.Round((maxExp-exp)*1.5f));
         ui.transform.Find("MinerInfo").Find("Str").Find("StrText").gameObject.GetComponent<Text>().text = this.mineStr.ToString();
         ui.transform.Find("MinerInfo").Find("Speed").Find("SpeedText").gameObject.GetComponent<Text>().text = this.speed.ToString();
         ui.transform.Find("Level").Find("ExpBar").gameObject.GetComponent<Slider>().value = (float)((exp/maxExp)*100);
@@ -125,6 +135,11 @@ public class MinerController : MonoBehaviour
         this.upgrades.Add(nextPath[number-1]);
         nextPath[number-1].Effect(this.gameObject);
         skillPoint -= 1;
+        if(skillPoint == 0){
+            if (rend != null){
+                rend.material = normal;
+            }
+        }
         nextPath.Clear();
         nextPath = gameManager.Get3RandomUpgrade(this.gameObject);
     }

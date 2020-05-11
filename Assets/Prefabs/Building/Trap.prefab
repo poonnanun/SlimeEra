@@ -112,6 +112,15 @@ MonoBehaviour:
   duration: 0
   speed: 1
   title: Trap
+  bulletParticle: {fileID: 6265045496817588536, guid: 5d4102453e3933d42a0d000afcdf52fc,
+    type: 3}
+  slowParticle: {fileID: 8281114097675478225, guid: 662db241773352442a7c2281888bb28e,
+    type: 3}
+  trapParticle: {fileID: 6080662704593801867, guid: 1be2a3dc3cceaf14a84a65595c756bb2,
+    type: 3}
+  lvUp: {fileID: 2100000, guid: 30bfd3c08451d144e9157b78ff5020bc, type: 2}
+  trapM: {fileID: 2100000, guid: 00d85659ff457ae4fac628dd6e400a93, type: 2}
+  slowM: {fileID: 2100000, guid: 688a9a929315eb94b97419c1ed6df3c3, type: 2}
 --- !u!1001 &4220013693590571130
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -189,6 +198,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: 2bf9fe77212af454896fe363fa238311,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 00d85659ff457ae4fac628dd6e400a93, type: 2}
     - target: {fileID: -927199367670048503, guid: 2bf9fe77212af454896fe363fa238311,
         type: 3}
       propertyPath: m_Name

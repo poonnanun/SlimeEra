@@ -135,6 +135,10 @@ public class GameManager : MonoBehaviour
         tmp.Add(powerUp1);
         Upgrade speedUp1 = new SpeedUp1();
         tmp.Add(speedUp1);
+        Upgrade expUp1 = new ExpUp1();
+        tmp.Add(expUp1);
+        Upgrade expUp2 = new ExpUp2();
+        tmp.Add(expUp2);
 
         //Sort each tier
         foreach(Upgrade u in tmp){
@@ -227,7 +231,7 @@ public class GameManager : MonoBehaviour
                 }else{
                     if(currency >= wallCost){
                         UseCurrency(wallCost);
-                        Vector3 newPos = new Vector3(selectedFloor.transform.position.x, selectedFloor.transform.position.y+1, selectedFloor.transform.position.z);
+                        Vector3 newPos = new Vector3(selectedFloor.transform.position.x, selectedFloor.transform.position.y+1f, selectedFloor.transform.position.z);
                         GameObject newObj = Instantiate(building, newPos, selectedFloor.transform.rotation);
                         wallDeploy++;
                         selectedFloor.GetComponent<FloorScript>().setHasWall(true);

@@ -26,13 +26,16 @@ public class TurretController : MonoBehaviour
     private List<Upgrade> nextPath;
     private float expRate;
     private LoadSprite loadSprite;
-    
+    public Material lvUp;
+    public Material normal;
+    private Renderer rend;
     private void Awake() {
         level = 1;
         exp = 0;
         isMax = false;
         maxExp = 100;
         expRate = 1;
+        rend = GetComponent<Renderer>();
         upgrades = new List<Upgrade>();
         loadSprite = GameObject.FindObjectOfType<LoadSprite>();
         gameManager = FindObjectOfType<GameManager>();
@@ -83,7 +86,7 @@ public class TurretController : MonoBehaviour
 
     void Shoot(){
         if(target != null){
-            GainExp(50);
+            GainExp(5);
             GameObject bulletGO = Instantiate(bulletPrefabs, transform.position, transform.rotation);
             bulletGO.GetComponent<BulletScript>().Seek(target, damage);
         }
@@ -121,11 +124,14 @@ public class TurretController : MonoBehaviour
     public void LevelUp(){
         level += 1;
         skillPoint += 1;
+        if (rend != null){
+            rend.material = lvUp;
+        }
         if(nextPath.Count == 0){
             nextPath = gameManager.Get3RandomUpgrade(this.gameObject);
         }
         exp = exp - maxExp;  
-        maxExp = maxExp * 2;
+        maxExp = maxExp * 1.25f;
         if(level == 10){
             isMax = true;
             exp = maxExp;
@@ -150,7 +156,7 @@ public class TurretController : MonoBehaviour
         }
         ui.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = this.title;
         ui.transform.Find("Level").gameObject.GetComponent<TMP_Text>().text = string.Format("Level {0}",this.level);
-        ui.transform.Find("Upgrade").Find("Text").gameObject.GetComponent<Text>().text = string.Format("Level: {0}",(maxExp-exp)*1.5);
+        ui.transform.Find("Upgrade").Find("Text").gameObject.GetComponent<Text>().text = string.Format("Level: {0}",Mathf.Round((maxExp-exp)*1.5f));
         ui.transform.Find("GunnerInfo").Find("Damage").Find("DamageText").gameObject.GetComponent<Text>().text = this.damage.ToString();
         ui.transform.Find("GunnerInfo").Find("Range").Find("RangeText").gameObject.GetComponent<Text>().text = this.range.ToString();
         ui.transform.Find("GunnerInfo").Find("Speed").Find("SpeedText").gameObject.GetComponent<Text>().text = Mathf.Round(this.fireRate).ToString();
@@ -175,6 +181,11 @@ public class TurretController : MonoBehaviour
         this.upgrades.Add(nextPath[number-1]);
         nextPath[number-1].Effect(this.gameObject);
         skillPoint -= 1;
+        if(skillPoint == 0){
+            if (rend != null){
+                rend.material = normal;
+            }
+        }
         nextPath.Clear();
         nextPath = gameManager.Get3RandomUpgrade(this.gameObject);
     }

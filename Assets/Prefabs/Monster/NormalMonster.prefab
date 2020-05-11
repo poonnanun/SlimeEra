@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 824110502}
   - component: {fileID: 275865609692092997}
   m_Layer: 8
-  m_Name: Sphere
+  m_Name: NormalMonster
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a5e1bc8547d4a3546b4206c5339125f6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -9,7 +9,7 @@ public class TrapController : MonoBehaviour
     public float slow;
     public float duration;
     public float speed;
-    public GameObject upgradePath;
+    private GameObject upgradePath;
     private float countdown;
     private float exp;
     private int level;
@@ -22,19 +22,27 @@ public class TrapController : MonoBehaviour
     private List<Upgrade> nextPath;
     private float expRate;
     private LoadSprite loadSprite;
+    public GameObject bulletParticle;
+    public GameObject slowParticle;
+    public GameObject trapParticle;
+    public Material lvUp;
+    public Material trapM;
+    public Material slowM;
+    private Renderer rend;
     private void Awake() {
         level = 1;
         exp = 0;
         isMax = false;
         maxExp = 100;
         expRate = 1;
+        rend = GetComponent<Renderer>();
         upgrades = new List<Upgrade>();
         loadSprite = GameObject.FindObjectOfType<LoadSprite>();
         gameManager = FindObjectOfType<GameManager>();
         upgradePath = gameManager.GetUpgradePath();
         nextPath = new List<Upgrade>();
     }
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerStay(Collider other) {
         if (countdown <= 0){
             if(other.gameObject.tag == "Monster"){
                 Hit(other.gameObject);
@@ -54,6 +62,13 @@ public class TrapController : MonoBehaviour
     }
     private void Hit(GameObject target){
         GainExp(5);
+        if(damage != 0){
+            GameObject effect = Instantiate(trapParticle, transform.position, trapParticle.transform.rotation);
+            Destroy(effect, 1.5f);
+        }else{
+            GameObject effect = Instantiate(slowParticle, transform.position, slowParticle.transform.rotation);
+            Destroy(effect, 1.5f);
+        }
         target.GetComponent<MonsterController>().Hit(damage);
         target.GetComponent<MonsterController>().Slow(slow, duration);
     }
@@ -68,11 +83,14 @@ public class TrapController : MonoBehaviour
     public void LevelUp(){
         level += 1;
         skillPoint += 1;
+        if (rend != null){
+            rend.material = lvUp;
+        }
         if(nextPath.Count == 0){
             nextPath = gameManager.Get3RandomUpgrade(this.gameObject);
         }
         exp = exp - maxExp;  
-        maxExp = maxExp * 2;
+        maxExp = maxExp * 1.25f;
         if(level == 10){
             isMax = true;
             exp = maxExp;
@@ -126,7 +144,7 @@ public class TrapController : MonoBehaviour
             ui.transform.Find("TrapInfo").Find("Str").Find("StrText").gameObject.GetComponent<Text>().text = this.damage.ToString();
             ui.transform.Find("Level").Find("ExpBar").gameObject.GetComponent<Slider>().value = ((exp/maxExp)*100);
         }
-        ui.transform.Find("Upgrade").Find("Text").gameObject.GetComponent<Text>().text = string.Format("Level: {0}",(maxExp-exp)*1.5);
+        ui.transform.Find("Upgrade").Find("Text").gameObject.GetComponent<Text>().text = string.Format("Level: {0}",Mathf.Round((maxExp-exp)*1.5f));
         int i = 1;
         foreach(Upgrade u in upgrades){
             string src = u.GetName();
@@ -147,6 +165,16 @@ public class TrapController : MonoBehaviour
         this.upgrades.Add(nextPath[number-1]);
         nextPath[number-1].Effect(this.gameObject);
         skillPoint -= 1;
+        if(skillPoint == 0){
+            if (rend != null){
+                if(damage == 0){
+                    rend.material = slowM;
+                }else{
+                    rend.material = trapM;
+                }
+                
+            }
+        }
         nextPath.Clear();
         nextPath = gameManager.Get3RandomUpgrade(this.gameObject);
     }
