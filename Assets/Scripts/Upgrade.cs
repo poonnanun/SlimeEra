@@ -27,7 +27,7 @@ public class PowerUp: Upgrade{
         id = 1;
         name = "PowerUp";
         rarity = 1;
-        description = "Increase the damage by 1.5x";
+        description = "Increase the damage or power by 1.5x";
         sprite = loadSprite.GetSprite(name);
     }
     public int GetRarity(){
@@ -130,7 +130,7 @@ public class PowerUp1: Upgrade{
         id = 3;
         name = "PowerUp1";
         rarity = 3;
-        description = "Increase the damage by 1";
+        description = "Increase the damage or power by 1";
         sprite = loadSprite.GetSprite(name);
     }
     public int GetRarity(){
@@ -216,6 +216,109 @@ public class SpeedUp1: Upgrade{
         }else if(tower.tag == "Trap"){
             TrapController sc = tower.GetComponent<TrapController>();
             sc.SetSpeed(sc.GetSpeed()+1f);
+        }
+    }
+}
+
+public class ExpUp1: Upgrade{
+    private int id;
+    private string name;
+    private int rarity;
+    private string tag;
+    private string description;
+    public Sprite sprite;
+    private LoadSprite loadSprite;
+    public ExpUp1(){
+        loadSprite = GameObject.FindObjectOfType<LoadSprite>();
+        tag = "Anyone";
+        id = 5;
+        name = "ExpUp1";
+        rarity = 3;
+        description = "Increase the exp rate by 1.25x";
+        sprite = loadSprite.GetSprite(name);
+    }
+    public int GetRarity(){
+        return rarity;
+    }
+    public string GetName(){
+        return name;
+    }
+    public int GetId(){
+        return id;
+    }
+    public string GetTag(){
+        return tag;
+    }
+    public string GetDescription(){
+        return description;
+    }
+    public Sprite GetSprite(){
+        return sprite;
+    }
+    public void Effect(GameObject tower){
+        if(tower.tag == "Gunner"){
+            TurretController sc = tower.GetComponent<TurretController>();
+            sc.AddExpRate(1.25f);
+        }else if(tower.tag == "Miner"){
+            MinerController sc = tower.GetComponent<MinerController>();
+            sc.AddExpRate(1.25f);
+        }else if(tower.tag == "Slow"){
+            TrapController sc = tower.GetComponent<TrapController>();
+            sc.AddExpRate(1.25f);
+        }else if(tower.tag == "Trap"){
+            TrapController sc = tower.GetComponent<TrapController>();
+            sc.AddExpRate(1.25f);
+        }
+    }
+}
+public class ExpUp2: Upgrade{
+    private int id;
+    private string name;
+    private int rarity;
+    private string tag;
+    private string description;
+    public Sprite sprite;
+    private LoadSprite loadSprite;
+    public ExpUp2(){
+        loadSprite = GameObject.FindObjectOfType<LoadSprite>();
+        tag = "Anyone";
+        id = 6;
+        name = "ExpUp2";
+        rarity = 2;
+        description = "Increase the exp rate by 1.50x";
+        sprite = loadSprite.GetSprite(name);
+    }
+    public int GetRarity(){
+        return rarity;
+    }
+    public string GetName(){
+        return name;
+    }
+    public int GetId(){
+        return id;
+    }
+    public string GetTag(){
+        return tag;
+    }
+    public string GetDescription(){
+        return description;
+    }
+    public Sprite GetSprite(){
+        return sprite;
+    }
+    public void Effect(GameObject tower){
+        if(tower.tag == "Gunner"){
+            TurretController sc = tower.GetComponent<TurretController>();
+            sc.AddExpRate(1.50f);
+        }else if(tower.tag == "Miner"){
+            MinerController sc = tower.GetComponent<MinerController>();
+            sc.AddExpRate(1.50f);
+        }else if(tower.tag == "Slow"){
+            TrapController sc = tower.GetComponent<TrapController>();
+            sc.AddExpRate(1.50f);
+        }else if(tower.tag == "Trap"){
+            TrapController sc = tower.GetComponent<TrapController>();
+            sc.AddExpRate(1.50f);
         }
     }
 }

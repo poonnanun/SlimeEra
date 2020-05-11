@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject minerInfo;
     public GameObject trapInfo;
     public GameObject slowInfo;
+    public GameObject upgradePath;
     public Image phase;
     public Sprite sun;
     public Sprite moon;
@@ -105,7 +106,6 @@ public class GameManager : MonoBehaviour
                 floorsPos.Add(int.Parse(tmp), true);
             }
         }
-        print("List Count = "+floorsPos.Count);
         currencyText.text = currency.ToString();
         wallDeployText.text = string.Format("{0}/{1}", wallDeploy.ToString(), maxWallDeploy.ToString());
     }
@@ -129,6 +129,12 @@ public class GameManager : MonoBehaviour
         List<Upgrade> tmp = new List<Upgrade>();
         Upgrade powerUp = new PowerUp();
         tmp.Add(powerUp);
+        Upgrade speedUp = new SpeedUp();
+        tmp.Add(speedUp);
+        Upgrade powerUp1 = new PowerUp1();
+        tmp.Add(powerUp1);
+        Upgrade speedUp1 = new SpeedUp1();
+        tmp.Add(speedUp1);
 
         //Sort each tier
         foreach(Upgrade u in tmp){
@@ -276,6 +282,50 @@ public class GameManager : MonoBehaviour
         monsters.Add(monster);
         monsterLeftText.text = monsters.Count.ToString();
     }
+    public void BuyLvUp(){
+        int cost = 0;
+        if(selectedUnit.tag == "Gunner"){
+            cost = selectedUnit.GetComponent<TurretController>().GetExpLeft();
+        }else if(selectedUnit.tag == "Miner"){
+            cost = selectedUnit.GetComponent<MinerController>().GetExpLeft();
+        }else if(selectedUnit.tag == "Slow"){
+            cost = selectedUnit.GetComponent<TrapController>().GetExpLeft();
+        }else if(selectedUnit.tag == "Trap"){
+            cost = selectedUnit.GetComponent<TrapController>().GetExpLeft();
+        }else{
+            return;
+        }
+        if(cost == 0){
+            return;
+        }
+        if(currency >= cost){
+            UseCurrency(cost);
+            if(selectedUnit.tag == "Gunner"){
+                selectedUnit.GetComponent<TurretController>().BuyLv();
+            }else if(selectedUnit.tag == "Miner"){
+                selectedUnit.GetComponent<MinerController>().BuyLv();
+            }else if(selectedUnit.tag == "Slow"){
+                selectedUnit.GetComponent<TrapController>().BuyLv();
+            }else if(selectedUnit.tag == "Trap"){
+                selectedUnit.GetComponent<TrapController>().BuyLv();
+            }
+            CloseUI();
+        }
+    }
+    public void UpgradeUnit(int number){
+        if(selectedUnit.tag == "Gunner"){
+            selectedUnit.GetComponent<TurretController>().UpgradeSkill(number);
+        }else if(selectedUnit.tag == "Miner"){
+            selectedUnit.GetComponent<MinerController>().UpgradeSkill(number);
+        }else if(selectedUnit.tag == "Slow"){
+            selectedUnit.GetComponent<TrapController>().UpgradeSkill(number);
+        }else if(selectedUnit.tag == "Trap"){
+            selectedUnit.GetComponent<TrapController>().UpgradeSkill(number);
+        }else{
+            return;
+        }
+        CloseUI();
+    }
     public void FinishSpawn(){
         isWaveRunning = 1;
     }
@@ -326,7 +376,7 @@ public class GameManager : MonoBehaviour
             description.SetActive(true);
         }
     }
-    public List<Upgrade> Get3RandomUpgrade(){
+    public List<Upgrade> Get3RandomUpgrade(GameObject tower){
         List<Upgrade> ups = new List<Upgrade>();
         int z = 0;
         while(z<3){
@@ -339,13 +389,13 @@ public class GameManager : MonoBehaviour
             }else if(luckyNum > 10){
                 tmp = upgradesT1[Random.Range(0,upgradesT1.Count)];
             }else{
-                if(selectedUnit.tag == "Gunner"){
+                if(tower.tag == "Gunner"){
                     tmp = upgradesGunner[Random.Range(0,upgradesGunner.Count)];
-                }else if(selectedUnit.tag == "Miner"){
+                }else if(tower.tag == "Miner"){
                    tmp = upgradesMiner[Random.Range(0,upgradesMiner.Count)];
-                }else if(selectedUnit.tag == "Slow"){
+                }else if(tower.tag == "Slow"){
                     tmp = upgradesSlow[Random.Range(0,upgradesSlow.Count)];
-                }else if(selectedUnit.tag == "Trap"){
+                }else if(tower.tag == "Trap"){
                     tmp = upgradesTrap[Random.Range(0,upgradesTrap.Count)];
                 }
             }
@@ -353,6 +403,9 @@ public class GameManager : MonoBehaviour
             z++;
         }
         return ups;
+    }
+    public GameObject GetUpgradePath(){
+        return upgradePath;
     }
     public void CloseUI(){
         buildUI.SetActive(false);
@@ -369,6 +422,7 @@ public class GameManager : MonoBehaviour
         slowInfo.SetActive(false);
         trapInfo.SetActive(false);
         description.SetActive(false);
+        upgradePath.SetActive(false);
         if(state == 1){
             state = 0;
         }

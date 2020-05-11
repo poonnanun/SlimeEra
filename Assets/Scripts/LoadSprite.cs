@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class LoadSprite : MonoBehaviour
 {
     public Sprite[] sprites;
+    public Sprite none;
 
     public Sprite GetSprite(string name){
         foreach(Sprite s in sprites){
@@ -14,5 +15,8 @@ public class LoadSprite : MonoBehaviour
             }
         }
         return null;
+    }
+    public Sprite GetNone(){
+        return none;
     }
 }
