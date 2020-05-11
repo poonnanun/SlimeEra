@@ -37,6 +37,7 @@ public class TrapController : MonoBehaviour
         
     }
     private void Hit(GameObject target){
+        GainExp(2);
         target.GetComponent<MonsterController>().Hit(damage);
         target.GetComponent<MonsterController>().Slow(slow, duration);
     }
@@ -63,10 +64,12 @@ public class TrapController : MonoBehaviour
             ui.transform.Find("Level").gameObject.GetComponent<TMP_Text>().text = string.Format("Level {0}",this.level);
             ui.transform.Find("SlowInfo").Find("Str").Find("SlowText").gameObject.GetComponent<Text>().text = this.slow.ToString();
             ui.transform.Find("SlowInfo").Find("Duration").Find("DurationText").gameObject.GetComponent<Text>().text = this.duration.ToString();
+            ui.transform.Find("Level").Find("ExpBar").gameObject.GetComponent<Slider>().value = exp;
         }else if(title == "Trap"){
             ui.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = this.title;
             ui.transform.Find("Level").gameObject.GetComponent<TMP_Text>().text = string.Format("Level {0}",this.level);
             ui.transform.Find("TrapInfo").Find("Str").Find("StrText").gameObject.GetComponent<Text>().text = this.damage.ToString();
+            ui.transform.Find("Level").Find("ExpBar").gameObject.GetComponent<Slider>().value = exp;
         }
         
     }

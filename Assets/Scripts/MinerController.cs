@@ -41,10 +41,11 @@ public class MinerController : MonoBehaviour
     }
     private void Mine(){
         gameManager.AddCurrency(mineStr);
+        GainExp(2);
     }
     public void GainExp(int getExp){
         if(!isMax){
-            this.exp += 50;
+            this.exp += getExp;
             if(exp >= 100){
                 level += 1;
                 LevelUp();
@@ -64,6 +65,7 @@ public class MinerController : MonoBehaviour
         ui.transform.Find("Level").gameObject.GetComponent<TMP_Text>().text = string.Format("Level {0}",this.level);
         ui.transform.Find("MinerInfo").Find("Str").Find("StrText").gameObject.GetComponent<Text>().text = this.mineStr.ToString();
         ui.transform.Find("MinerInfo").Find("Speed").Find("SpeedText").gameObject.GetComponent<Text>().text = this.mineRate.ToString();
+        ui.transform.Find("Level").Find("ExpBar").gameObject.GetComponent<Slider>().value = exp;
     }
     
 }

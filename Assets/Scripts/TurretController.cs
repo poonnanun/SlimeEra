@@ -70,6 +70,7 @@ public class TurretController : MonoBehaviour
 
     void Shoot(){
         if(target != null){
+            GainExp(2);
             GameObject bulletGO = Instantiate(bulletPrefabs, transform.position, transform.rotation);
             bulletGO.GetComponent<BulletScript>().Seek(target, damage);
         }
@@ -107,5 +108,6 @@ public class TurretController : MonoBehaviour
         ui.transform.Find("GunnerInfo").Find("Damage").Find("DamageText").gameObject.GetComponent<Text>().text = this.damage.ToString();
         ui.transform.Find("GunnerInfo").Find("Range").Find("RangeText").gameObject.GetComponent<Text>().text = this.range.ToString();
         ui.transform.Find("GunnerInfo").Find("Speed").Find("SpeedText").gameObject.GetComponent<Text>().text = this.fireRate.ToString();
+        ui.transform.Find("Level").Find("ExpBar").gameObject.GetComponent<Slider>().value = exp;
     }
 }

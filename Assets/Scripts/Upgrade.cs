@@ -8,6 +8,7 @@ public interface Upgrade{
     string GetName();
     int GetId();
     string GetTag();
+    string GetDescription();
 }
 
 public class DamageUp: Upgrade{
@@ -15,11 +16,13 @@ public class DamageUp: Upgrade{
     private string name;
     private int rarity;
     private string tag;
+    private string description;
     public DamageUp(){
         tag = "Gunner";
         id = 1;
         name = "DamageUp";
         rarity = 1;
+        description = "Increase the damage by 1.5x";
     }
     public int GetRarity(){
         return rarity;
@@ -32,6 +35,9 @@ public class DamageUp: Upgrade{
     }
     public string GetTag(){
         return tag;
+    }
+    public string GetDescription(){
+        return description;
     }
     public void Effect(GameObject tower){
         TurretController sc = tower.GetComponent<TurretController>();

@@ -118,6 +118,11 @@ public class GameManager : MonoBehaviour
         unitUI.SetActive(true);
     }
     public void SelectUnit(GameObject unit){
+        gunnerInfo.SetActive(true);
+        gunnerInfo.SetActive(false);
+        minerInfo.SetActive(false);
+        slowInfo.SetActive(false);
+        trapInfo.SetActive(false);
         selectedUnit = unit;
         if(state == 0){
             state = 1;
@@ -226,13 +231,13 @@ public class GameManager : MonoBehaviour
         monsters.Remove(monster);
         foreach(GameObject t in towers){
             if(t.tag == "Gunner"){
-                t.GetComponent<TurretController>().GainExp(1);
+                t.GetComponent<TurretController>().GainExp(10);
             }else if(t.tag == "Miner"){
-                t.GetComponent<MinerController>().GainExp(1);
+                t.GetComponent<MinerController>().GainExp(10);
             }else if(t.tag == "Slow"){
-                t.GetComponent<TrapController>().GainExp(1);
+                t.GetComponent<TrapController>().GainExp(10);
             }else if(t.tag == "Trap"){
-                t.GetComponent<TrapController>().GainExp(1);
+                t.GetComponent<TrapController>().GainExp(10);
             }
         }
         AddCurrency(monsterBounty);
@@ -255,10 +260,7 @@ public class GameManager : MonoBehaviour
         trapInfo.SetActive(false);
         if(state == 1){
             state = 0;
-        }else if(state == 2){
-            state = 2;
         }
-        
     }
     public void SetState(int state){
         this.state = state;
