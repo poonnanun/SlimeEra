@@ -22,11 +22,14 @@ public class GameManager : MonoBehaviour
     public Text monsterLeftText;
     public Text currencyText;
     public Text wallDeployText;
+    public TMP_Text descriptionText;
+    public GameObject description;
     public GameObject gameOverPanel;
     public GameObject wallPrefabs;
     public GameObject gunnerPrefabs;
     public GameObject minerPrefabs;
     public GameObject positionTrigger;
+    public GameObject end;
     public List<GameObject> floors;
     private SpawnScript spawnScript;
     private GameObject selectedFloor;
@@ -306,6 +309,51 @@ public class GameManager : MonoBehaviour
         monsterLeftText.text = monsters.Count.ToString();
         Destroy(monster);
     }    
+    public void Describe(int number){
+        string desc = "";
+        if(selectedUnit.tag == "Gunner"){
+            desc = selectedUnit.GetComponent<TurretController>().GetDescription(number);
+        }else if(selectedUnit.tag == "Miner"){
+            desc = selectedUnit.GetComponent<MinerController>().GetDescription(number);
+        }else if(selectedUnit.tag == "Slow"){
+            desc = selectedUnit.GetComponent<TrapController>().GetDescription(number);
+        }else if(selectedUnit.tag == "Trap"){
+            desc = selectedUnit.GetComponent<TrapController>().GetDescription(number);
+        }
+        if(desc == ""){
+        }else{
+            descriptionText.text = desc;
+            description.SetActive(true);
+        }
+    }
+    public List<Upgrade> Get3RandomUpgrade(){
+        List<Upgrade> ups = new List<Upgrade>();
+        int z = 0;
+        while(z<3){
+            int luckyNum = Random.Range(11, 100);//TODO
+            Upgrade tmp = null;
+            if(luckyNum > 50){
+                tmp = upgradesT3[Random.Range(0,upgradesT3.Count)];
+            }else if(luckyNum > 25){
+                tmp = upgradesT2[Random.Range(0,upgradesT2.Count)];
+            }else if(luckyNum > 10){
+                tmp = upgradesT1[Random.Range(0,upgradesT1.Count)];
+            }else{
+                if(selectedUnit.tag == "Gunner"){
+                    tmp = upgradesGunner[Random.Range(0,upgradesGunner.Count)];
+                }else if(selectedUnit.tag == "Miner"){
+                   tmp = upgradesMiner[Random.Range(0,upgradesMiner.Count)];
+                }else if(selectedUnit.tag == "Slow"){
+                    tmp = upgradesSlow[Random.Range(0,upgradesSlow.Count)];
+                }else if(selectedUnit.tag == "Trap"){
+                    tmp = upgradesTrap[Random.Range(0,upgradesTrap.Count)];
+                }
+            }
+            ups.Add(tmp);
+            z++;
+        }
+        return ups;
+    }
     public void CloseUI(){
         buildUI.SetActive(false);
         unitUI.SetActive(false);
@@ -320,6 +368,7 @@ public class GameManager : MonoBehaviour
         minerInfo.SetActive(false);
         slowInfo.SetActive(false);
         trapInfo.SetActive(false);
+        description.SetActive(false);
         if(state == 1){
             state = 0;
         }
@@ -335,6 +384,9 @@ public class GameManager : MonoBehaviour
     }
     public bool GetWallMax(){
         return wallMax;
+    }
+    public GameObject GetEnd(){
+        return end;
     }
     public void AddCurrency(int curr){
         this.currency += curr;

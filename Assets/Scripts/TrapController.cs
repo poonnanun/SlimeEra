@@ -10,17 +10,19 @@ public class TrapController : MonoBehaviour
     public float duration;
     public float speed;
     private float countdown;
-    private int exp;
+    private float exp;
     private int level;
     private bool isMax;
     private List<Upgrade> upgrades;
     public string title;
+    private float maxExp;
     private GameManager gameManager;
     
     private void Awake() {
         level = 1;
         exp = 0;
         isMax = false;
+        maxExp = 100;
         upgrades = new List<Upgrade>();
         gameManager = FindObjectOfType<GameManager>();
     }
@@ -43,20 +45,21 @@ public class TrapController : MonoBehaviour
         countdown -= Time.deltaTime;
     }
     private void Hit(GameObject target){
-        GainExp(2);
+        GainExp(5);
         target.GetComponent<MonsterController>().Hit(damage);
         target.GetComponent<MonsterController>().Slow(slow, duration);
     }
-    public void GainExp(int getExp){
+    public void GainExp(float getExp){
         if(!isMax){
             this.exp += getExp;
-            if(exp >= 100){
+            if(exp >= maxExp){
                 level += 1;
                 LevelUp();
-                exp = exp - 100;  
+                exp = exp - maxExp;  
+                maxExp = maxExp * 2;
                 if(level == 10){
                     isMax = true;
-                    exp = 100;
+                    exp = maxExp;
                 }
             }
         } 
@@ -64,18 +67,51 @@ public class TrapController : MonoBehaviour
     public void LevelUp(){
         print("Ding!!");
     }
+    public string GetDescription(int number){
+        return upgrades[number-1].GetDescription();
+    }
+    public int GetDamage(){
+        return damage;
+    }
+    public float GetSlow(){
+        return slow;
+    }
+    public void SetDamage(int damage){
+        this.damage = damage;
+    }
+    public void SetSlow(float slow){
+        this.slow = slow;
+    }
+    public float GetSpeed(){
+        return speed;
+    }
+    public void SetSpeed(float speed){
+        this.speed = speed;
+    }
+    public float GetDuration(){
+        return duration;
+    }
+    public void SetDuration(float duration){
+        this.duration = duration;
+    }
     public void SetInfo(GameObject ui){
         if(title == "Slow"){
             ui.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = this.title;
             ui.transform.Find("Level").gameObject.GetComponent<TMP_Text>().text = string.Format("Level {0}",this.level);
             ui.transform.Find("SlowInfo").Find("Str").Find("SlowText").gameObject.GetComponent<Text>().text = this.slow.ToString();
             ui.transform.Find("SlowInfo").Find("Duration").Find("DurationText").gameObject.GetComponent<Text>().text = this.duration.ToString();
-            ui.transform.Find("Level").Find("ExpBar").gameObject.GetComponent<Slider>().value = exp;
+            ui.transform.Find("Level").Find("ExpBar").gameObject.GetComponent<Slider>().value = (int)Mathf.Round((exp/maxExp)*100);
         }else if(title == "Trap"){
             ui.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = this.title;
             ui.transform.Find("Level").gameObject.GetComponent<TMP_Text>().text = string.Format("Level {0}",this.level);
             ui.transform.Find("TrapInfo").Find("Str").Find("StrText").gameObject.GetComponent<Text>().text = this.damage.ToString();
-            ui.transform.Find("Level").Find("ExpBar").gameObject.GetComponent<Slider>().value = exp;
+            ui.transform.Find("Level").Find("ExpBar").gameObject.GetComponent<Slider>().value = ((exp/maxExp)*100);
+        }
+        int i = 1;
+        foreach(Upgrade u in upgrades){
+            string src = u.GetName();
+            ui.transform.Find("PowerUp").Find("Button"+i.ToString()).Find("Power"+i.ToString()).GetComponent<Image>().sprite = u.GetSprite();
+            i++;
         }
         
     }

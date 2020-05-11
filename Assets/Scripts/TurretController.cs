@@ -10,21 +10,25 @@ public class TurretController : MonoBehaviour
     public float range;
     public float fireRate;
     public int damage;
+    private GameObject end;
     private float fireCountdown = 0f;
     private GameManager gameManager;
     [Header("Assets")]
     public GameObject bulletPrefabs;
-    private int exp;
+    private float exp;
     private int level;
     private bool isMax;
     private List<Upgrade> upgrades;
     public string title;
+    private float maxExp;
     private void Awake() {
         level = 1;
         exp = 0;
         isMax = false;
+        maxExp = 100;
         upgrades = new List<Upgrade>();
         gameManager = FindObjectOfType<GameManager>();
+        end = gameManager.GetEnd();
     }
     void Start()
     {
@@ -35,12 +39,11 @@ public class TurretController : MonoBehaviour
         float shortestDist = Mathf.Infinity;
         GameObject nearestMonster = null;
         foreach(GameObject monster in gameManager.GetMonsters()){
-            float distToMonster = Vector3.Distance(transform.position, monster.transform.position);
-            if (distToMonster < shortestDist){
+            float distToMonster = Vector3.Distance(end.transform.position, monster.transform.position);
+            float distToThatMonster = Vector3.Distance(transform.position, monster.transform.position);
+            if (distToMonster < shortestDist && distToThatMonster <= range){
                 shortestDist = distToMonster;
                 nearestMonster = monster;
-            }
-            if(nearestMonster != null && shortestDist <= range){
                 target = nearestMonster.transform;
             }
             if(target != null){
@@ -70,7 +73,7 @@ public class TurretController : MonoBehaviour
 
     void Shoot(){
         if(target != null){
-            GainExp(2);
+            GainExp(50);
             GameObject bulletGO = Instantiate(bulletPrefabs, transform.position, transform.rotation);
             bulletGO.GetComponent<BulletScript>().Seek(target, damage);
         }
@@ -91,17 +94,23 @@ public class TurretController : MonoBehaviour
     public float GetSpeed(){
         return fireRate;
     }
-    public void GainExp(int getExp){
+    public void SetRange(float range){
+        this.range = range;
+    }
+    public float GetRange(){
+        return range;
+    }
+    public void GainExp(float getExp){
         if(!isMax){
             this.exp += getExp;
-            // this.exp += 50;
-            if(exp >= 100){
+            if(exp >= maxExp){
                 level += 1;
                 LevelUp();
-                exp = exp - 100;  
+                exp = exp - maxExp;  
+                maxExp = maxExp * 2;
                 if(level == 10){
                     isMax = true;
-                    exp = 100;
+                    exp = maxExp;
                 }
             }
         } 
@@ -112,17 +121,25 @@ public class TurretController : MonoBehaviour
         upgrades.Add(speedUp);
         print("Ding!!");
     }
+    public string GetDescription(int number){
+        if(upgrades.Count>=number){
+            return upgrades[number-1].GetDescription();
+        }
+        else{
+            return "";
+        }
+    }
     public void SetInfo(GameObject ui){
         ui.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = this.title;
         ui.transform.Find("Level").gameObject.GetComponent<TMP_Text>().text = string.Format("Level {0}",this.level);
         ui.transform.Find("GunnerInfo").Find("Damage").Find("DamageText").gameObject.GetComponent<Text>().text = this.damage.ToString();
         ui.transform.Find("GunnerInfo").Find("Range").Find("RangeText").gameObject.GetComponent<Text>().text = this.range.ToString();
         ui.transform.Find("GunnerInfo").Find("Speed").Find("SpeedText").gameObject.GetComponent<Text>().text = Mathf.Round(this.fireRate).ToString();
-        ui.transform.Find("Level").Find("ExpBar").gameObject.GetComponent<Slider>().value = exp;
+        ui.transform.Find("Level").Find("ExpBar").gameObject.GetComponent<Slider>().value = ((exp/maxExp)*100);
         int i = 1;
         foreach(Upgrade u in upgrades){
             string src = u.GetName();
-            ui.transform.Find("PowerUp").Find("Power"+i.ToString()).GetComponent<Image>().sprite = u.GetSprite();
+            ui.transform.Find("PowerUp").Find("Button"+i.ToString()).Find("Power"+i.ToString()).GetComponent<Image>().sprite = u.GetSprite();
             i++;
         }
     }
