@@ -12,7 +12,6 @@ public class DescriptionController : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
     }
     private void OnMouseEnter() {
-        print("_----------------");
         gameManager.Describe(number);
     }
 }

@@ -24,9 +24,7 @@ public class MonsterController : MonoBehaviour
         hp = 100;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    public void SetSpeed(float speed){
         
     }
     public void SetHp(int hp){

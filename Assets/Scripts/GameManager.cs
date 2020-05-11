@@ -178,6 +178,9 @@ public class GameManager : MonoBehaviour
     public List<Upgrade> GetUpgradeTrap(){
         return upgradesTrap;
     }
+    public int GetWave(){
+        return wave;
+    }
     public void SelectFloor(GameObject floor){
         selectedFloor = floor;
         state = 1;
@@ -240,7 +243,6 @@ public class GameManager : MonoBehaviour
                     Vector3 newPos = new Vector3(selectedFloor.transform.position.x, selectedFloor.transform.position.y+0.5f, selectedFloor.transform.position.z);
                     GameObject newObj = Instantiate(building, newPos, selectedFloor.transform.rotation);
                     towers.Add(newObj);
-                    print("tower Count = "+towers.Count);
                     selectedFloor.GetComponent<FloorScript>().setHasWall(true);
                     wallDeploy++;
                     wallDeployText.text = string.Format("{0}/{1}", wallDeploy.ToString(), maxWallDeploy.ToString());
@@ -270,7 +272,6 @@ public class GameManager : MonoBehaviour
             UseCurrency(cost);
             GameObject tmp = Instantiate(building, newPos, selectedWall.transform.rotation);
             towers.Add(tmp);
-            print("tower Count = "+towers.Count);
             selectedWall.GetComponent<WallScript>().setHasUnit(1);
         }else{
             selectedWall.GetComponent<WallScript>().ErrorPlace();
@@ -451,7 +452,7 @@ public class GameManager : MonoBehaviour
         this.currencyText.text = currency.ToString();
     }
     public void Spawn(){
-        spawnScript.Spawn(wave*2);
+        spawnScript.Spawn(wave);
     }
     public void FinishWave(){
         wave += 1;

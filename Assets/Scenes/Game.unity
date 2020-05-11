@@ -18282,6 +18282,24 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2310253760117409750, guid: 20330a17195d4074ba506a4f001c5f61,
+        type: 3}
+      propertyPath: normalMonster
+      value: 
+      objectReference: {fileID: 4615814694539319373, guid: b0b09177d77a4944e9b47f2cf37bbd6b,
+        type: 3}
+    - target: {fileID: 2310253760117409750, guid: 20330a17195d4074ba506a4f001c5f61,
+        type: 3}
+      propertyPath: miniBoss
+      value: 
+      objectReference: {fileID: 1363849072105850940, guid: c25f8ae5b1f9f3248a3c7cc44e247766,
+        type: 3}
+    - target: {fileID: 2310253760117409750, guid: 20330a17195d4074ba506a4f001c5f61,
+        type: 3}
+      propertyPath: boss
+      value: 
+      objectReference: {fileID: 3052813852950057846, guid: 26fbe7416f0e28140b1b09b4e706fe51,
+        type: 3}
     - target: {fileID: 4901448367150567303, guid: 20330a17195d4074ba506a4f001c5f61,
         type: 3}
       propertyPath: m_Mesh
