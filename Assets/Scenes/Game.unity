@@ -9402,7 +9402,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-717600
+  m_Name: pb_Mesh-742926
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -10406,6 +10406,13 @@ MonoBehaviour:
   currentKillText: {fileID: 848547776}
   highestWaveText: {fileID: 1330137522}
   currentWaveText: {fileID: 756877945}
+  day: {r: 0.7075858, g: 0.990566, b: 0.28502133, a: 1}
+  night: {r: 0.3600628, g: 0.3218227, b: 0.6037736, a: 1}
+  dayLight: {r: 0.97402173, g: 0.99215686, b: 0.92156863, a: 1}
+  moonLight: {r: 0.5887343, g: 0.38042897, b: 0.9716981, a: 1}
+  cam: {fileID: 1156651016}
+  dLight: {fileID: 1326162318}
+  duration: 2
 --- !u!4 &687224065
 Transform:
   m_ObjectHideFlags: 0
@@ -12311,7 +12318,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh645458
+  m_Name: pb_Mesh665654
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

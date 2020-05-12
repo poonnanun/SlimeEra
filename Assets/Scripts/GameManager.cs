@@ -68,6 +68,16 @@ public class GameManager : MonoBehaviour
     private int wallCost;
     private int monsterBounty;
     private int kill;
+    public Color day;
+    public Color night;
+    public Color dayLight;
+    public Color moonLight;
+    public Camera cam;
+    public Light dLight;
+    private bool dusking;
+    private bool dawning;
+    public float duration;
+    private float t = 0;
     void Awake()
     {
         DeclareObjects();
@@ -77,6 +87,8 @@ public class GameManager : MonoBehaviour
 
     private void Start() {
         FindShotestPath();
+        cam.backgroundColor = day;
+        dLight.color = dayLight;
     }
     void FixedUpdate()
     {
@@ -85,6 +97,15 @@ public class GameManager : MonoBehaviour
                 isWaveRunning = 0;
                 FinishWave();
             }
+        }
+        if(dawning){
+            t += Time.deltaTime / duration;
+            cam.backgroundColor = Color.Lerp(night, day, t);
+            dLight.color = Color.Lerp(moonLight, dayLight, t);
+        }if(dusking){
+            t += Time.deltaTime / duration;
+            cam.backgroundColor = Color.Lerp(day, night, t);
+            dLight.color = Color.Lerp(dayLight, moonLight, t);
         }
     }
     private void InitializeValues(){
@@ -102,6 +123,8 @@ public class GameManager : MonoBehaviour
         trapCost = 25;
         wallCost = 10;
         monsterBounty = 2;
+        dusking = false;
+        dawning = false;
         orginalPosition = new Vector3(0, 100, 0);
         lifeText.text = life.ToString();
         waveText.text = wave.ToString();
@@ -113,7 +136,7 @@ public class GameManager : MonoBehaviour
             }
         }
         currencyText.text = currency.ToString();
-        wallDeployText.text = string.Format("{0}/{1}", wallDeploy.ToString(), maxWallDeploy.ToString());
+        wallDeployText.text = string.Format("{0}/{1}", wallDeploy.ToString(), maxWallDeploy.ToString()); 
     }
     private void DeclareObjects(){
         floorsPos = new Dictionary<int, bool>();
@@ -476,6 +499,8 @@ public class GameManager : MonoBehaviour
         }
         state = 0;
         phase.sprite = sun;
+        dawning = true;
+        Invoke("StopTransition",duration);
         skip.SetActive(true);
     }
     public void Night(){
@@ -484,6 +509,8 @@ public class GameManager : MonoBehaviour
         }
         state = 2;
         phase.sprite = moon;
+        dusking = true;
+        Invoke("StopTransition",duration);
         skip.SetActive(false);
         Spawn();
     }
@@ -646,5 +673,10 @@ public class GameManager : MonoBehaviour
         currentKillText.text = string.Format("Current kills: {0}", kill);
         highestWaveText.text = string.Format("Highest Waves: {0}", PlayerPrefs.GetInt("BestWave"));
         currentWaveText.text = string.Format("Current Waves: {0}", wave);
+    }  
+    public void StopTransition(){
+        dusking = false;
+        dawning = false;
+        t = 0;
     }
 }
