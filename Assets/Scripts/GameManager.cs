@@ -32,6 +32,10 @@ public class GameManager : MonoBehaviour
     public GameObject positionTrigger;
     public GameObject end;
     public List<GameObject> floors;
+    public TMP_Text highestKillText;
+    public TMP_Text currentKillText;
+    public TMP_Text highestWaveText;
+    public TMP_Text currentWaveText;
     private SpawnScript spawnScript;
     private GameObject selectedFloor;
     private GameObject selectedWall;
@@ -63,6 +67,7 @@ public class GameManager : MonoBehaviour
     private int trapCost;
     private int wallCost;
     private int monsterBounty;
+    private int kill;
     void Awake()
     {
         DeclareObjects();
@@ -85,6 +90,7 @@ public class GameManager : MonoBehaviour
     private void InitializeValues(){
         life = 10; // need to implement this later4
         wave = 1; // need to implement this later
+        kill = 0;
         wallMax = false;
         currency = 200;
         wallDeploy = 0;
@@ -361,6 +367,7 @@ public class GameManager : MonoBehaviour
             }
         }
         AddCurrency(monsterBounty);
+        kill++;
         monsterLeftText.text = monsters.Count.ToString();
         Destroy(monster);
     }    
@@ -481,6 +488,7 @@ public class GameManager : MonoBehaviour
         Spawn();
     }
     public void GameOver(){
+        GetHighScore();
         gameOverPanel.SetActive(true);
     }
     public void MainMenu(){
@@ -617,7 +625,26 @@ public class GameManager : MonoBehaviour
                 posParents.Add(currPosition,currPosition-1);
             }
         }
-        
         return tmp;
+    }
+    public void GetHighScore(){
+        if(PlayerPrefs.HasKey("BestKill")){
+            if(PlayerPrefs.GetInt("BestKill") < kill){
+                PlayerPrefs.SetInt("BestKill",kill);
+            }
+        }else{
+            PlayerPrefs.SetInt("BestKill",kill);
+        }
+        if(PlayerPrefs.HasKey("BestWave")){
+            if(PlayerPrefs.GetInt("BestWave") < wave){
+                PlayerPrefs.SetInt("BestWave",wave);
+            }
+        }else{
+            PlayerPrefs.SetInt("BestWave",wave);
+        }
+        highestKillText.text = string.Format("Highest kills: {0}", PlayerPrefs.GetInt("BestKill"));
+        currentKillText.text = string.Format("Current kills: {0}", kill);
+        highestWaveText.text = string.Format("Highest Waves: {0}", PlayerPrefs.GetInt("BestWave"));
+        currentWaveText.text = string.Format("Current Waves: {0}", wave);
     }
 }
