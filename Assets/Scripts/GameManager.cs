@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start() {
-        FindShotestPath();
+        Invoke("FindShotestPath",0.5f);
         cam.backgroundColor = day;
         dLight.color = dayLight;
     }

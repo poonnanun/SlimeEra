@@ -15,7 +15,7 @@ public class MonsterController : MonoBehaviour
         normalSpeed = 1f;
         gameManager = FindObjectOfType<GameManager>();
         agent = GetComponent<NavMeshAgent>();
-        endPoint = GameObject.Find("End");
+        endPoint = gameManager.GetEnd();
     }
     void Start()
     {

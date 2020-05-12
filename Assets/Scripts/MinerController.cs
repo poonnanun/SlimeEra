@@ -44,7 +44,7 @@ public class MinerController : MonoBehaviour
         if(gameManager.GetState() == 2){
             if (countdown <= 0){
                 Mine();
-                countdown = 1f / speed;
+                countdown = 2f / speed;
             }
             countdown -= Time.deltaTime;
         }
@@ -79,7 +79,7 @@ public class MinerController : MonoBehaviour
             nextPath = gameManager.Get3RandomUpgrade(this.gameObject);
         }
         exp = exp - maxExp;  
-        maxExp = maxExp * 1.25f;
+        maxExp = maxExp * 2f;
         if(level == 10){
             isMax = true;
             exp = maxExp;

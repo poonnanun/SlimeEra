@@ -131,7 +131,7 @@ public class TurretController : MonoBehaviour
             nextPath = gameManager.Get3RandomUpgrade(this.gameObject);
         }
         exp = exp - maxExp;  
-        maxExp = maxExp * 1.25f;
+        maxExp = maxExp * 2f;
         if(level == 10){
             isMax = true;
             exp = maxExp;
